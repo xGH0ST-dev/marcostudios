@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARCO STUDIOS - Premium GTA Cinematics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom colors */
+        :root {
+            --color-bg-start: #171C26;
+            --color-bg-end: #04080D;
+            --color-text-light: #F2F2F2;
+            --color-text-medium: #A1A2A6;
+            --color-surface: #3A3B40;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-start); /* Fallback */
+            background-image: linear-gradient(to bottom, var(--color-bg-start), var(--color-bg-end));
+            color: var(--color-text-medium);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-bg-end);
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--color-surface);
+            border-radius: 10px;
+            border: 2px solid var(--color-bg-end);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--color-text-medium);
+        }
+
+        /* Custom styles */
+        .hero-bg {
+            position: relative; /* Needed for absolute positioning of children */
+            overflow: hidden; /* Hide anything that might spill out */
+            -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+        }
+
+        .hero-background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1.5s ease-in-out; /* Smooth transition for opacity */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, #F2F2F2, #A1A2A6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .header-scrolled {
+            background-color: var(--color-bg-start);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .aspect-video {
+            aspect-ratio: 16 / 9;
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind all other content */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="header">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold tracking-widest text-[#F2F2F2]">MARCO STUDIOS</a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#showcase" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">Showcase</a>
+                    <a href="#about" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">About</a>
+                    <a href="#team" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">Marco Fam</a>
+                    <a href="#booking" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">Booking</a>
+                    <a href="#contact" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">Contact</a>
+                </nav>
+                <button id="mobile-menu-button" class="md:hidden text-[#A1A2A6] focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+         <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#171C26]">
+            <a href="#showcase" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">Showcase</a>
+            <a href="#about" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">About</a>
+            <a href="#team" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">Marco Fam</a>
+            <a href="#booking" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">Booking</a>
+            <a href="#contact" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">Contact</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center hero-bg" id="hero-section">
+        <div id="hero-bg-1" class="hero-background-image"></div>
+        <div id="hero-bg-2" class="hero-background-image" style="opacity: 0;"></div>
+
+        <div class="text-center px-4 hero-content">
+            <h1 class="text-4xl md:text-7xl font-black uppercase reveal">
+                <span class="text-gradient">Crafting Cinematic</span>
+                <br>
+                <span class="text-[#F2F2F2]">Worlds in Motion</span>
+            </h1>
+            <p class="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-[#A1A2A6] reveal" style="transition-delay: 200ms;">We produce stunning and premium GTA cinematics that captivate, thrill, and tell unforgettable stories.</p>
+            <a href="#showcase" class="mt-10 inline-block bg-[#F2F2F2] text-[#04080D] font-bold uppercase tracking-widest py-3 px-8 rounded-lg hover:bg-opacity-90 transition-transform duration-300 hover:scale-105 reveal" style="transition-delay: 400ms;">
+                View Our Work
+            </a>
+        </div>
+    </section>
+
+    <!-- Showcase Section -->
+    <section id="showcase" class="py-20 md:py-32 bg-transparent">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold uppercase reveal text-[#F2F2F2]">Our Showcase</h2>
+                <p class="mt-4 max-w-xl mx-auto text-[#A1A2A6] reveal" style="transition-delay: 100ms;">A glimpse into the narratives we've brought to life.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Video 1 -->
+                <div class="reveal">
+                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/XSrhd86koYc?si=YvO19H6It58jay0x" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-lg font-bold text-[#F2F2F2]">BMW Commercial In GTAV</h3>
+                        <p class="text-sm text-[#A1A2A6] mt-1">From Los Santos with style — a GTA V BMW commercial that blurs the line between game and reality.</p>
+                    </div>
+                </div>
+                <!-- Video 2 -->
+                <div class="reveal" style="transition-delay: 200ms;">
+                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/hKt7nUCu7Kg?si=vNPRnZxv9jnVs0lj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                     <div class="mt-4">
+                        <h3 class="text-lg font-bold text-[#F2F2F2]">The DEAL</h3>
+                        <p class="text-sm text-[#A1A2A6] mt-1">Its designed to deliver immersive and dynamic roleplay for all types of players—from casual newcomers to serious RP veterans.</p>
+                    </div>
+                </div>
+                 <!-- Video 3 -->
+                <div class="reveal" style="transition-delay: 200ms;">
+                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/ICm-HsyxuyU?si=xw8kXbVIPcPUGSzq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                     <div class="mt-4">
+                        <h3 class="text-lg font-bold text-[#F2F2F2]">Heist Gateway</h3>
+                        <p class="text-sm text-[#A1A2A6] mt-1">Heist Gateway Is Sponsored By Gta Fivem Server Named Three Queens.</p>
+                    </div>
+                </div>
+                <!-- Video 4 -->
+                <div class="reveal" style="transition-delay: 400ms;">
+                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
+                       <iframe class="w-full h-full" src="https://www.youtube.com/embed/Gk9spYNF5uQ?si=I8na_B7sMVWoXdlE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-lg font-bold text-[#F2F2F2]">GTA V Cinematic Trailer</h3>
+                        <p class="text-sm text-[#A1A2A6] mt-1">GTA V reimagined — a cinematic trailer pulsing with style and chaos.</p>
+                    </div>
+                </div>
+                <div class="reveal" style="transition-delay: 400ms;">
+                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
+                       <iframe class="w-full h-full" src="https://www.youtube.com/embed/FND0z4NF8Pg?si=uNxikiBdTug48RnM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-lg font-bold text-[#F2F2F2]">GTA V Cinematic Loading Screen</h3>
+                        <p class="text-sm text-[#A1A2A6] mt-1">GTA V gets the Hollywood treatment in this custom cinematic loading screen.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 md:py-32 bg-[#04080D] bg-opacity-40">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 reveal">
+                    <h2 class="text-3xl md:text-5xl font-bold uppercase text-[#F2F2F2]">ABOUT STUDIOS</h2>
+                    <p class="mt-6 text-lg text-[#A1A2A6] leading-relaxed">MARCO STUDIOS was born from a passion for storytelling and the limitless potential of the Grand Theft Auto universe. We are a collective of digital artists, directors, and editors dedicated to pushing the boundaries of cinematic machinima. Our approach combines meticulous attention to detail with a flair for dramatic narrative, resulting in visuals that are not just recorded, but masterfully crafted.</p>
+                </div>
+                <div class="md:w-1/2 reveal" style="transition-delay: 200ms;">
+                    <img src="https://media.discordapp.net/attachments/1031080332012814398/1338415924713095178/Untitled_2.15.1.jpg?ex=68cfad77&is=68ce5bf7&hm=3c6e58b07f700c741651817e127c69ca2ee467aeae49983a85d0d9c809ccf288&=&format=webp&width=1526&height=859" alt="Studio Image" class="rounded-lg shadow-2xl w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARCO FAM Section -->
+    <section id="team" class="py-20 md:py-32 bg-transparent">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold uppercase reveal text-[#F2F2F2]">MARCO FAM</h2>
+                <p class="mt-4 max-w-xl mx-auto text-[#A1A2A6] reveal" style="transition-delay: 100ms;">The creative minds behind the studio.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Profile Card 1 -->
+                <div class="bg-[var(--color-surface)] rounded-lg p-6 text-center shadow-2xl reveal hover:-translate-y-2 transition-transform duration-300">
+                    <img class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-[var(--color-bg-end)] object-cover" src="https://cdn.discordapp.com/avatars/904765997934866533/a_56e5afaec08d681287d507d552ae925e.gif?size=1024" alt="Profile picture of MARCO">
+                    <h3 class="text-xl font-bold text-[var(--color-text-light)]">MARCO</h3>
+                    <p class="text-[var(--color-text-medium)] uppercase text-sm font-semibold tracking-wider">Admin & Founder</p>
+                </div>
+                <!-- Profile Card 2 -->
+                <div class="bg-[var(--color-surface)] rounded-lg p-6 text-center shadow-2xl reveal hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 150ms;">
+                    <img class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-[var(--color-bg-end)] object-cover" src="https://cdn.discordapp.com/avatars/962742206681198702/5e02932b3ea820428a7a6cd74b767cd6.png?size=1024" alt="Profile picture of a moderator">
+                    <h3 class="text-xl font-bold text-[var(--color-text-light)]">XGHOST</h3>
+                    <p class="text-[var(--color-text-medium)] uppercase text-sm font-semibold tracking-wider">Moderator & Bot De</p>
+                </div>
+                <!-- Profile Card 3 -->
+                <div class="bg-[var(--color-surface)] rounded-lg p-6 text-center shadow-2xl reveal hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 300ms;">
+                    <img class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-[var(--color-bg-end)] object-cover" src="https://cdn.discordapp.com/avatars/325626131552272385/6805a782ea99fd4560886ce9d0e03f7f.png?size=1024" alt="Profile picture of a moderator">
+                    <h3 class="text-xl font-bold text-[var(--color-text-light)]">Medusa</h3>
+                    <p class="text-[var(--color-text-medium)] uppercase text-sm font-semibold tracking-wider">Guest</p>
+                </div>
+                <!-- Profile Card 4 -->
+                <div class="bg-[var(--color-surface)] rounded-lg p-6 text-center shadow-2xl reveal hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 450ms;">
+                    <img class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-[var(--color-bg-end)] object-cover" src="https://cdn.discordapp.com/avatars/339068296546615296/bf79d523892f94e2945cc073dee51590.png?size=1024" alt="Profile picture of an editor">
+                    <h3 class="text-xl font-bold text-[var(--color-text-light)]">prec1_</h3>
+                    <p class="text-[var(--color-text-medium)] uppercase text-sm font-semibold tracking-wider">Moderator</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="py-20 md:py-32">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold uppercase reveal text-[#F2F2F2]">How to Book a Cinematic</h2>
+            <p class="mt-6 max-w-2xl mx-auto text-[#A1A2A6] text-lg leading-relaxed reveal" style="transition-delay: 100ms;">
+                Join Our Discord Server, head to the <strong>#booking</strong> channel and click "Book Cinematic". Sometimes the button will be dimmed, which means bookings are temporarily closed due to high demand. You can check the <strong>#commission-status</strong> channel to see whether bookings are open or closed.
+            </p>
+            <a href="#" class="mt-10 inline-block bg-[#5865F2] text-white font-bold uppercase tracking-widest py-3 px-8 rounded-lg hover:bg-opacity-90 transition-transform duration-300 hover:scale-105 reveal" style="transition-delay: 200ms;">
+                Join Our Discord
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 md:py-32 bg-[#04080D] bg-opacity-40">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold uppercase reveal text-[#F2F2F2]">Ready to Create?</h2>
+            <p class="mt-4 max-w-xl mx-auto text-[#A1A2A6] text-lg reveal" style="transition-delay: 100ms;">Let's collaborate on your next cinematic masterpiece. Reach out and let us know what you're dreaming of.</p>
+            <a href="mailto:contact@marcostudios.com" class="mt-10 inline-block bg-[#F2F2F2] text-[#04080D] font-bold uppercase tracking-widest py-3 px-8 rounded-lg hover:bg-opacity-90 transition-transform duration-300 hover:scale-105 reveal" style="transition-delay: 200ms;">
+                Get In Touch
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-transparent py-8">
+        <div class="container mx-auto px-6 text-center text-[#A1A2A6]">
+            <p class="text-sm">&copy; 2024 MARCO STUDIOS. All Rights Reserved.</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="#" class="hover:text-[#F2F2F2] transition">Twitter</a>
+                <a href="#" class="hover:text-[#F2F2F2] transition">YouTube</a>
+                <a href="#" class="hover:text-[#F2F2F2] transition">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hero background rotator
+            const heroBg1 = document.getElementById('hero-bg-1');
+            const heroBg2 = document.getElementById('hero-bg-2');
+            
+            const bgImages = [
+                'https://media.discordapp.net/attachments/1031080332012814398/1410655351392440340/Untitled-kk1-Recovered_1.png?ex=68cf786c&is=68ce26ec&hm=d5c96d0964290159f114f8f7414a8230addcab00cbfd33979a38f268baeb9a3f&=&format=webp&quality=lossless&width=1860&height=841',
+                'https://media.discordapp.net/attachments/1031080332012814398/1402994603631710235/Untitled-swtt1-Recovered.png?ex=68cff20b&is=68cea08b&hm=c3fefa563b79d82b2ce427ba6fa86169c3d1b4bba160d3c68f01c846c7473de4&=&format=webp&quality=lossless&width=1860&height=838',
+                'https://media.discordapp.net/attachments/1031080332012814398/1401861215843516510/Untitled-swt1-Recovered.png?ex=68cfc6ff&is=68ce757f&hm=aaea659f6d3fb3c803a70e9e32c927b57ef7a3190a9b25ba249f8d776b48f32b&=&format=webp&quality=lossless&width=1860&height=838',
+                'https://media.discordapp.net/attachments/1031080332012814398/1400909836673355867/Untitled-tt1-Recovered.png?ex=68cf9cb4&is=68ce4b34&hm=67bae94692883c09b93c187ada0e7455c975b2b20db0fcff26cb40c7a7a94814&=&format=webp&quality=lossless&width=1860&height=844',
+                'https://media.discordapp.net/attachments/1031080332012814398/1375573425548169226/Untitled-g1-Recovered.png?ex=68cfb955&is=68ce67d5&hm=4870b6d083f19beccba2cf2519198190060cfe5946d3995af35ddb3670bb45bc&=&format=webp&quality=lossless&width=688&height=341',
+                'https://media.discordapp.net/attachments/1031080332012814398/1374802172742602855/Untitled-121-Recovered.png?ex=68cf8e0c&is=68ce3c8c&hm=a4738445225ad5ee9aceab49f4497f0462e593b06908f1f5ada42c90626ae40c&=&format=webp&quality=lossless&width=1860&height=783',
+                'https://media.discordapp.net/attachments/1031080332012814398/1361778015763169621/Untitled-531-Recovered.png?ex=68cfa25b&is=68ce50db&hm=ce9889d181eb38c9473b662f32dc1eca684957d0ce8424661919429093fa0acf&=&format=webp&quality=lossless&width=688&height=286',
+                'https://media.discordapp.net/attachments/1031080332012814398/1357074689616511047/Untitled-10.png?ex=68cfa98b&is=68ce580b&hm=512b75ce84830181d679c2d23e88b271e63cf052653742b2da9b70b22d375c82&=&format=webp&quality=lossless&width=688&height=386',
+                'https://media.discordapp.net/attachments/1031080332012814398/1373250108723826748/Untitled-441-Recovered.png?ex=68cfd753&is=68ce85d3&hm=ff8f10090c7bcabcc48cf47eb1507465b66d4c6aaf2681b3c8a99e3eaf6f323c&=&format=webp&quality=lossless&width=1526&height=859'
+            ];
+            let currentBgIndex = 0;
+            let isBg1Active = true;
+
+            // Set initial background
+            heroBg1.style.backgroundImage = `linear-gradient(rgba(23, 28, 38, 0.8), rgba(4, 8, 13, 1)), url('${bgImages[0]}')`;
+
+            setInterval(() => {
+                currentBgIndex = (currentBgIndex + 1) % bgImages.length;
+                const nextImage = `linear-gradient(rgba(23, 28, 38, 0.8), rgba(4, 8, 13, 1)), url('${bgImages[currentBgIndex]}')`;
+
+                if (isBg1Active) {
+                    // heroBg1 is active, so fade in heroBg2
+                    heroBg2.style.backgroundImage = nextImage;
+                    heroBg2.style.opacity = 1;
+                    heroBg1.style.opacity = 0;
+                } else {
+                    // heroBg2 is active, so fade in heroBg1
+                    heroBg1.style.backgroundImage = nextImage;
+                    heroBg1.style.opacity = 1;
+                    heroBg2.style.opacity = 0;
+                }
+                
+                isBg1Active = !isBg1Active;
+            }, 30000); // 40 seconds
+
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+            });
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            // close mobile menu when a link is clicked
+            mobileMenu.addEventListener('click', (e) => {
+                if(e.target.tagName === 'A'){
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+
+            // Reveal on scroll
+            const revealElements = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            revealElements.forEach(el => {
+                observer.observe(el);
+            });
+
+            // Interactive Particle background
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particlesArray;
+
+            const mouse = {
+                x: null,
+                y: null,
+                radius: (canvas.height / 120) * (canvas.width / 120)
+            };
+
+            window.addEventListener('mousemove', function(event) {
+                mouse.x = event.x;
+                mouse.y = event.y;
+            });
+
+            class Particle {
+                constructor(x, y, directionX, directionY, size, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.directionX = directionX;
+                    this.directionY = directionY;
+                    this.size = size;
+                    this.color = color;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                    ctx.fillStyle = 'rgba(161, 162, 166, 0.2)';
+                    ctx.fill();
+                }
+                update() {
+                    if (this.x > canvas.width || this.x < 0) {
+                        this.directionX = -this.directionX;
+                    }
+                    if (this.y > canvas.height || this.y < 0) {
+                        this.directionY = -this.directionY;
+                    }
+                    this.x += this.directionX;
+                    this.y += this.directionY;
+                    this.draw();
+                }
+            }
+
+            function init() {
+                particlesArray = [];
+                let numberOfParticles = (canvas.height * canvas.width) / 9000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let size = (Math.random() * 2) + 1;
+                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                    let directionX = (Math.random() * .4) - 0.2;
+                    let directionY = (Math.random() * .4) - 0.2;
+                    let color = '#A1A2A6';
+                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+                }
+            }
+
+            function connect() {
+                let opacityValue = 1;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+                            ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                        if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                            opacityValue = 1 - (distance / 20000);
+                            ctx.strokeStyle = 'rgba(161, 162, 166,' + opacityValue + ')';
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                }
+                connect();
+            }
+
+            window.addEventListener('resize', function() {
+                canvas.width = innerWidth;
+                canvas.height = innerHeight;
+                mouse.radius = ((canvas.height / 120) * (canvas.height / 120));
+                init();
+            });
+            
+            window.addEventListener('mouseout', function(){
+                mouse.x = undefined;
+                mouse.y = undefined;
+            });
+
+            init();
+            animate();
+        });
+    </script>
+</body>
+</html>
+
