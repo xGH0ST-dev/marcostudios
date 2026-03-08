@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARCO STUDIOS - Premium GTA Cinematics</title>
+    <title>MARCO STUDIOS - Visit Us</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
     <style>
         /* Define custom colors */
         :root {
@@ -23,68 +19,23 @@
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--color-bg-start); /* Fallback */
+            background-color: var(--color-bg-start);
             background-image: linear-gradient(to bottom, var(--color-bg-start), var(--color-bg-end));
             color: var(--color-text-medium);
+            margin: 0;
+            overflow: hidden; /* Prevents scrollbars since it's just a single screen */
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--color-bg-end);
-        }
-        ::-webkit-scrollbar-thumb {
-            background-color: var(--color-surface);
-            border-radius: 10px;
-            border: 2px solid var(--color-bg-end);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background-color: var(--color-text-medium);
-        }
-
-        /* Custom styles */
-        .hero-bg {
-            position: relative; /* Needed for absolute positioning of children */
-            overflow: hidden; /* Hide anything that might spill out */
-            -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-            mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-        }
-
-        .hero-background-image {
-            position: absolute;
+        #particle-canvas {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-size: cover;
-            background-position: center;
-            transition: opacity 1.5s ease-in-out; /* Smooth transition for opacity */
+            z-index: 0; /* Place it behind content */
         }
 
-        /* Styles for the new About section slideshow */
-        .about-background-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            transition: transform 1s ease-in-out; /* Smooth transition for transform */
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 10;
-        }
-
-        .text-gradient {
-            background: linear-gradient(90deg, #F2F2F2, #A1A2A6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        /* Reveal Animation */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -94,504 +45,72 @@
             opacity: 1;
             transform: translateY(0);
         }
-        .header-scrolled {
-            background-color: rgba(23, 28, 38, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+        .text-gradient {
+            background: linear-gradient(90deg, #F2F2F2, #A1A2A6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .aspect-video {
-            aspect-ratio: 16 / 9;
+
+        /* Floating Animation for Logo */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
         }
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .floating-logo {
+            animation: float 4s ease-in-out infinite;
+            max-width: 250px;
             width: 100%;
-            height: 100%;
-            z-index: -1; /* Place it behind all other content */
+            height: auto;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 15px rgba(242, 242, 242, 0.2));
+            z-index: 20;
         }
-        
-        /* Custom Profile Card styles */
-        .profile-card {
-            position: relative;
-            background-color: rgba(58, 59, 64, 0.4); /* Glassy background */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem; /* 12px */
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            overflow: hidden; /* Important for pseudo-elements */
-        }
-
-        /* Shiny border sweep on hover */
-        .profile-card::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(242, 242, 242, 0.15), transparent);
-            transform: translateY(100%) scale(1.5) rotate(45deg);
-            opacity: 0;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            z-index: 1;
-        }
-
-        .profile-card:hover::before {
-            transform: translateY(-100%) scale(1.5) rotate(45deg);
-            opacity: 1;
-        }
-
-        /* Make content appear above the shiny border */
-        .profile-card > * {
-            position: relative;
-            z-index: 2;
-        }
-
-        .profile-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-
-        .profile-image {
-            width: 8rem;
-            height: 8rem;
-            border-radius: 9999px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 1rem;
-            object-fit: cover;
-            border: 4px solid transparent;
-            background: linear-gradient(var(--color-surface), var(--color-surface)) padding-box, linear-gradient(135deg, #5865F2, #F2F2F2) border-box;
-            transition: transform 0.3s ease;
-        }
-        .profile-card:hover .profile-image {
-            transform: scale(1.05);
-        }
-        
-        /* Styles for Expanded Image Modal */
-        #about-slideshow {
-            cursor: zoom-in;
-        }
-        .modal-open {
-            overflow: hidden;
-        }
-
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased h-screen w-screen flex flex-col items-center justify-center">
 
+    <!-- Interactive Background -->
     <canvas id="particle-canvas"></canvas>
 
-    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="header">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <a href="#" class="text-2xl font-bold tracking-widest text-[#F2F2F2]">MARCO STUDIOS</a>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="#showcase" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">Showcase</a>
-                    <a href="#about" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">About</a>
-                    <a href="#team" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">Marco Fam</a>
-                    <a href="#booking" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">Booking</a>
-                    <a href="#contact" class="text-sm uppercase font-semibold text-[#A1A2A6] hover:text-[#F2F2F2] transition">Contact</a>
-                </nav>
-                <button id="mobile-menu-button" class="md:hidden text-[#A1A2A6] focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
-        </div>
-         <div id="mobile-menu" class="hidden md:hidden bg-[#171C26]">
-            <a href="#showcase" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">Showcase</a>
-            <a href="#about" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">About</a>
-            <a href="#team" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">Marco Fam</a>
-            <a href="#booking" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">Booking</a>
-            <a href="#contact" class="block py-2 px-4 text-sm text-[#A1A2A6] hover:bg-[#3A3B40]">Contact</a>
-        </div>
-    </header>
+    <!-- Main Content Area -->
+    <main class="relative z-10 flex flex-col items-center text-center px-6">
+        <!-- Floating Logo -->
+        <img src="https://i.postimg.cc/0QBGqDT1/ms-logo.png" alt="Marco Studios Logo" class="floating-logo reveal">
 
-    <section class="min-h-screen flex items-center justify-center hero-bg" id="hero-section">
-        <div id="hero-bg-1" class="hero-background-image"></div>
-        <div id="hero-bg-2" class="hero-background-image" style="opacity: 0;"></div>
-
-        <div class="text-center px-4 hero-content">
-            <h1 class="text-4xl md:text-7xl font-black uppercase reveal">
-                <span class="text-gradient">Crafting Cinematic</span>
-                <br>
-                <span class="text-[#F2F2F2]">Worlds in Motion</span>
-            </h1>
-            <p class="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-[#A1A2A6] reveal" style="transition-delay: 200ms;">We produce stunning and premium GTA cinematics that captivate, thrill, and tell unforgettable stories.</p>
-            <a href="#showcase" class="mt-10 inline-block bg-[#F2F2F2] text-[#04080D] font-bold uppercase tracking-widest py-3 px-8 rounded-lg hover:bg-opacity-90 transition-transform duration-300 hover:scale-105 reveal" style="transition-delay: 400ms;">
-                View Our Work
-            </a>
-        </div>
-    </section>
-
-    <section id="showcase" class="py-20 md:py-32 bg-transparent">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold uppercase reveal text-[#F2F2F2]">Our Showcase</h2>
-                <p class="mt-4 max-w-xl mx-auto text-[#A1A2A6] reveal" style="transition-delay: 100ms;">A glimpse into the narratives we've brought to life.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                 <div class="reveal" style="transition-delay: 200ms;">
-                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/jbCaFdb4Lhc?si=zEXJGnY8G71-gUVk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                     <div class="mt-4">
-                        <h3 class="text-lg font-bold text-[#F2F2F2]">LET'S RP | FIVEM | LOADING SCREEN | GTA 5 [4K]</h3>
-                        <p class="text-sm text-[#A1A2A6] mt-1">Welcome to Lets Roleplay, a Vietnamese RP world where every moment turns into a story.</p>
-                    </div>
-                </div>
-                <div class="reveal" style="transition-delay: 200ms;">
-                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/MdL_Sk_GTiM?si=LGiGuZZLFpr3RgF3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                     <div class="mt-4">
-                        <h3 class="text-lg font-bold text-[#F2F2F2]">Prime Roleplay (Action Trailer) - GTA V Cinematic [4K]</h3>
-                        <p class="text-sm text-[#A1A2A6] mt-1">Prime Roleplay Fivem Server - GTA V Cinematic. The most immersive and evolving FiveM experiences out there Prime Roleplay</p>
-                    </div>
-                </div>
-                <div class="reveal" style="transition-delay: 200ms;">
-                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/hKt7nUCu7Kg?si=vNPRnZxv9jnVs0lj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                     <div class="mt-4">
-                        <h3 class="text-lg font-bold text-[#F2F2F2]">The DEAL</h3>
-                        <p class="text-sm text-[#A1A2A6] mt-1">Its designed to deliver immersive and dynamic roleplay for all types of players—from casual newcomers to serious RP veterans.</p>
-                    </div>
-                </div>
-                <div class="reveal" style="transition-delay: 400ms;">
-                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
-                       <iframe class="w-full h-full" src="https://www.youtube.com/embed/Gk9spYNF5uQ?si=I8na_B7sMVWoXdlE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold text-[#F2F2F2]">GTA V Cinematic Trailer</h3>
-                        <p class="text-sm text-[#A1A2A6] mt-1">GTA V reimagined — a cinematic trailer pulsing with style and chaos.</p>
-                    </div>
-                </div>
-                <div class="reveal">
-                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/XSrhd86koYc?si=YvO19H6It58jay0x" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold text-[#F2F2F2]">BMW Commercial In GTAV</h3>
-                        <p class="text-sm text-[#A1A2A6] mt-1">From Los Santos with style — a GTA V BMW commercial that blurs the line between game and reality.</p>
-                    </div>
-                </div>
-                <div class="reveal" style="transition-delay: 400ms;">
-                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
-                       <iframe class="w-full h-full" src="https://www.youtube.com/embed/FND0z4NF8Pg?si=uNxikiBdTug48RnM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold text-[#F2F2F2]">GTA V Cinematic BLAZE RP Loading Screen</h3>
-                        <p class="text-sm text-[#A1A2A6] mt-1">GTA V gets the Hollywood treatment in this custom cinematic loading screen.</p>
-                    </div>
-                </div>
-                 <div class="reveal" style="transition-delay: 400ms;">
-                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
-                       <iframe class="w-full h-full" src="https://www.youtube.com/embed/OnWNOuCyXL8?si=Q5OO4V0JD6wZ9IY7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold text-[#F2F2F2]">Midnight RUN</h3>
-                        <p class="text-sm text-[#A1A2A6] mt-1">GTA V takes the wheel with Midnight Run as a Porsche roars into the spotlight in this custom cinematic experience.</p>
-                    </div>
-                </div>
-                
-                <div class="reveal" style="transition-delay: 200ms;">
-                    <div class="group relative overflow-hidden rounded-lg shadow-2xl aspect-video">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/ICm-HsyxuyU?si=xw8kXbVIPcPUGSzq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    </div>
-                     <div class="mt-4">
-                        <h3 class="text-lg font-bold text-[#F2F2F2]">Heist Gateway</h3>
-                        <p class="text-sm text-[#A1A2A6] mt-1">Heist Gateway Is Sponsored By Gta Fivem Server Named Three Queens.</p>
-                    </div>
-                </div>
-                
-                </div>
-        </div>
-    </section>
-
-    <section id="about" class="py-20 md:py-32 bg-[#04080D] bg-opacity-40">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="md:w-1/2 reveal">
-                    <h2 class="text-3xl md:text-5xl font-bold uppercase text-[#F2F2F2]">ABOUT STUDIOS</h2>
-                    <p class="mt-6 text-lg text-[#A1A2A6] leading-relaxed">MARCO STUDIOS was born from a passion for storytelling and the limitless potential of the Grand Theft Auto universe. We are a collective of digital artists, directors, and editors dedicated to pushing the boundaries of cinematic machinima. Our approach combines meticulous attention to detail with a flair for dramatic narrative, resulting in visuals that are not just recorded, but masterfully crafted.</p>
-                </div>
-                <div class="md:w-1/2 reveal" style="transition-delay: 200ms;">
-                    <div id="about-slideshow" class="relative rounded-lg shadow-2xl w-full aspect-video overflow-hidden">
-                        <div id="about-bg-1" class="about-background-image"></div>
-                        <div id="about-bg-2" class="about-background-image"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="team" class="py-20 md:py-32 bg-transparent">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold uppercase reveal text-[#F2F2F2]">MARCO FAM</h2>
-                <p class="mt-4 max-w-xl mx-auto text-[#A1A2A6] reveal" style="transition-delay: 100ms;">The creative minds behind the studio.</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div class="profile-card reveal">
-                    <img class="profile-image" src="https://i.postimg.cc/XJLtZbXH/a-da3a3ea47306b823487175f0fcf65719.gif" alt="Profile picture of MARCO">
-                    <h3 class="text-xl font-bold text-[var(--color-text-light)]">MARCO</h3>
-                    <p class="text-[var(--color-text-medium)] uppercase text-sm font-semibold tracking-wider">Admin & Founder</p>
-                </div>
-                <div class="profile-card reveal" style="transition-delay: 150ms;">
-                    <img class="profile-image" src="https://cdn.discordapp.com/avatars/962742206681198702/5e02932b3ea820428a7a6cd74b767cd6.png?size=1024" alt="Profile picture of a moderator">
-                    <h3 class="text-xl font-bold text-[var(--color-text-light)]">XGHOST</h3>
-                    <p class="text-[var(--color-text-medium)] uppercase text-sm font-semibold tracking-wider">Moderator & Bot Dev</p>
-                </div>
-                <div class="profile-card reveal" style="transition-delay: 300ms;">
-                    <img class="profile-image" src="https://i.postimg.cc/90jXBhYr/b78ce8c940cf5bd91e0a01f5b3d33900.jpg" alt="Profile picture of an editor">
-                    <h3 class="text-xl font-bold text-[var(--color-text-light)]">Hash</h3>
-                    <p class="text-[var(--color-text-medium)] uppercase text-sm font-semibold tracking-wider">Moderator</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="booking" class="py-20 md:py-32">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-5xl font-bold uppercase reveal text-[#F2F2F2]">How to Book a Cinematic</h2>
-            <p class="mt-6 max-w-2xl mx-auto text-[#A1A2A6] text-lg leading-relaxed reveal" style="transition-delay: 100ms;">
-                Join Our Discord Server, head to the <strong>#booking</strong> channel and click "Book Cinematic". Sometimes the button will be dimmed, which means bookings are temporarily closed due to high demand. You can check the <strong>#commission-status</strong> channel to see whether bookings are open or closed.
-            </p>
-            <a href="https://discord.com/invite/Xcw3XqRrPY" class="mt-10 inline-block bg-[#5865F2] text-white font-bold uppercase tracking-widest py-3 px-8 rounded-lg hover:bg-opacity-90 transition-transform duration-300 hover:scale-105 reveal" style="transition-delay: 200ms;">
-                Join Our Discord
-            </a>
-        </div>
-    </section>
-
-    <section id="contact" class="py-20 md:py-32 bg-[#04080D] bg-opacity-40">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-5xl font-bold uppercase reveal text-[#F2F2F2]">Ready to Create?</h2>
-            <p class="mt-4 max-w-xl mx-auto text-[#A1A2A6] text-lg reveal" style="transition-delay: 100ms;">Let's collaborate on your next cinematic masterpiece. Reach out and let us know what you're dreaming of.</p>
-            <a href="mailto:ffsanz65@gmail.com" class="mt-10 inline-block bg-[#F2F2F2] text-[#04080D] font-bold uppercase tracking-widest py-3 px-8 rounded-lg hover:bg-opacity-90 transition-transform duration-300 hover:scale-105 reveal" style="transition-delay: 200ms;">
-                Get In Touch
-            </a>
-        </div>
-    </section>
-
-    <footer class="bg-transparent py-8">
-        <div class="container mx-auto px-6 text-center text-[#A1A2A6]">
-            <p class="text-sm">&copy; 2025 MARCO STUDIOS. All Rights Reserved.</p>
-            <div class="flex justify-center space-x-6 mt-4">
-                <a href="#" class="hover:text-[#F2F2F2] transition">Twitter</a>
-                <a href="https://www.youtube.com/@Marco_StudiosOrg" class="hover:text-[#F2F2F2] transition">YouTube</a>
-                <a href="https://www.instagram.com/_marco_studios_/" class="hover:text-[#F2F2F2] transition">Instagram</a>
-            </div>
-        </div>
-    </footer>
-
-    <div id="image-modal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 flex justify-center items-center z-[100] hidden transition-opacity duration-300 p-4">
-        <span id="close-modal" class="absolute top-5 right-8 text-white text-5xl font-bold cursor-pointer hover:text-gray-400 transition-colors">&times;</span>
-        <img id="modal-image" class="max-w-full max-h-full object-contain rounded-lg" src="" alt="Expanded View">
-    </div>
-
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-widest reveal mb-10" style="transition-delay: 100ms;">
+            <span class="text-gradient">Visit Us Here</span>
+        </h1>
+        
+        <!-- Change the href to whatever link you want MARCO STUDIOS to go to -->
+        <a href="https://marco-studios.vercel.app/" target="_blank" rel="noopener noreferrer" class="inline-block bg-[#F2F2F2] text-[#04080D] font-bold text-lg md:text-xl uppercase tracking-widest py-4 px-12 rounded-lg hover:bg-[#A1A2A6] transition-all duration-300 hover:scale-105 shadow-[0_0_20px_rgba(242,242,242,0.3)] hover:shadow-[0_0_30px_rgba(242,242,242,0.5)] reveal" style="transition-delay: 200ms;">
+            MARCO STUDIOS
+        </a>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Hero background rotator
-            const heroBg1 = document.getElementById('hero-bg-1');
-            const heroBg2 = document.getElementById('hero-bg-2');
-            
-            // MODIFICATION: Using local images from 'bgImages' folder
-            const bgImages = [
-                'bgImages/1.png',
-                'bgImages/2.png',
-                'bgImages/3.png',
-                'bgImages/4.png',
-                'bgImages/5.png',
-                'bgImages/6.png',
-                'bgImages/7.png',
-                'bgImages/8.png',
-                'bgImages/9.png',
-                'bgImages/10.jpg',
-                'bgImages/11.png',
-                'bgImages/12.png',
-                'bgImages/13.png',
-                'bgImages/14.png'
-            ];
-            let currentBgIndex = 0;
-            let isBg1Active = true;
+            // 1. Reveal Elements on Load
+            setTimeout(() => {
+                const revealElements = document.querySelectorAll('.reveal');
+                revealElements.forEach(el => el.classList.add('visible'));
+            }, 100);
 
-            // Set initial background
-            heroBg1.style.backgroundImage = `linear-gradient(rgba(23, 28, 38, 0.8), rgba(4, 8, 13, 1)), url('${bgImages[0]}')`;
-
-            setInterval(() => {
-                currentBgIndex = (currentBgIndex + 1) % bgImages.length;
-                const nextImage = `linear-gradient(rgba(23, 28, 38, 0.8), rgba(4, 8, 13, 1)), url('${bgImages[currentBgIndex]}')`;
-
-                if (isBg1Active) {
-                    heroBg2.style.backgroundImage = nextImage;
-                    heroBg2.style.opacity = 1;
-                    heroBg1.style.opacity = 0;
-                } else {
-                    heroBg1.style.backgroundImage = nextImage;
-                    heroBg1.style.opacity = 1;
-                    heroBg2.style.opacity = 0;
-                }
-                
-                isBg1Active = !isBg1Active;
-            }, 5000); // 5 seconds
-            
-            // MODIFICATION START: Updated slideshow logic for standard autoplay slider
-            const aboutBg1 = document.getElementById('about-bg-1');
-            const aboutBg2 = document.getElementById('about-bg-2');
-            
-            // MODIFICATION: Using local images from 'aboutImages' folder
-            const aboutImages = [
-                'aboutImages/1.png',
-                'aboutImages/2.png',
-                'aboutImages/3.png',
-                'aboutImages/4.png',
-                'aboutImages/5.png',
-                'aboutImages/6.png',
-                'aboutImages/7.png',
-                'aboutImages/8.png',
-                'aboutImages/9.png',
-                'aboutImages/10.jpg',
-                'aboutImages/11.png',
-                'aboutImages/12.png',
-                'aboutImages/13.png',
-                'aboutImages/14.png',
-                'aboutImages/15.png',
-                'aboutImages/16.png',
-                'aboutImages/17.png',
-                'aboutImages/19.png'
-            ];
-            let currentAboutBgIndex = 0;
-            let activeSlideEl = aboutBg1;
-            let nextSlideEl = aboutBg2;
-
-            // Initial setup for horizontal slider
-            if (aboutImages.length > 0) {
-              activeSlideEl.style.backgroundImage = `url('${aboutImages[0]}')`;
-              activeSlideEl.style.transform = 'translateX(0%)';
-              nextSlideEl.style.transform = 'translateX(100%)'; // Start off-screen to the right
-            }
-
-            const slideTransition = () => {
-                if (aboutImages.length < 2) return;
-
-                currentAboutBgIndex = (currentAboutBgIndex + 1) % aboutImages.length;
-                const nextImageUrl = `url('${aboutImages[currentAboutBgIndex]}')`;
-                
-                // Prepare the next slide with the new image, positioned off-screen right
-                nextSlideEl.style.backgroundImage = nextImageUrl;
-                
-                // Animate the active slide out to the left
-                activeSlideEl.style.transform = 'translateX(-100%)';
-
-                // Animate the next slide in from the right
-                nextSlideEl.style.transform = 'translateX(0%)';
-                
-                // After the transition ends, swap roles and reset the old slide
-                setTimeout(() => {
-                  const oldActive = activeSlideEl;
-                  
-                  // The slide that just animated in is now the active one
-                  activeSlideEl = nextSlideEl;
-                  
-                  // The slide that was just animated out becomes the next one in the queue
-                  nextSlideEl = oldActive;
-                  
-                  // Instantly move the new 'next' slide to the starting position (off-screen right) without a transition.
-                  nextSlideEl.style.transition = 'none'; 
-                  nextSlideEl.style.transform = 'translateX(100%)';
-                  
-                  // Force the browser to apply the style change immediately
-                  nextSlideEl.offsetHeight; 
-                  
-                  // Re-enable the transition so it's ready for its next turn
-                  nextSlideEl.style.transition = 'transform 1s ease-in-out';
-
-                }, 1000); // This timeout MUST match the CSS transition duration
-            };
-
-            setInterval(slideTransition, 3000);
-            // MODIFICATION END
-
-            // Image Modal Logic
-            const slideshowContainer = document.getElementById('about-slideshow');
-            const imageModal = document.getElementById('image-modal');
-            const modalImage = document.getElementById('modal-image');
-            const closeModal = document.getElementById('close-modal');
-
-            slideshowContainer.addEventListener('click', () => {
-                const imageUrl = window.getComputedStyle(activeSlideEl).backgroundImage.slice(4, -1).replace(/"/g, "");
-                modalImage.src = imageUrl;
-                imageModal.classList.remove('hidden');
-                document.body.classList.add('modal-open');
-            });
-
-            const closeModalFunction = () => {
-                imageModal.classList.add('hidden');
-                document.body.classList.remove('modal-open');
-            };
-
-            closeModal.addEventListener('click', closeModalFunction);
-            imageModal.addEventListener('click', (e) => {
-                if (e.target === imageModal) {
-                    closeModalFunction();
-                }
-            });
-
-
-            // Header scroll effect
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('header-scrolled');
-                } else {
-                    header.classList.remove('header-scrolled');
-                }
-            });
-
-            // Mobile menu toggle
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            mobileMenu.addEventListener('click', (e) => {
-                if(e.target.tagName === 'A'){
-                    mobileMenu.classList.add('hidden');
-                }
-            });
-
-            // Reveal on scroll
-            const revealElements = document.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            revealElements.forEach(el => { observer.observe(el); });
-
-            // Interactive Particle background
+            // 2. Interactive Particle Background
             const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            
             let particlesArray;
             const mouse = { x: null, y: null, radius: (canvas.height / 120) * (canvas.width / 120) };
+            
             window.addEventListener('mousemove', function(event) {
                 mouse.x = event.x;
                 mouse.y = event.y;
             });
+
             class Particle {
                 constructor(x, y, directionX, directionY, size, color) {
                     this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color;
@@ -599,7 +118,7 @@
                 draw() {
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                    ctx.fillStyle = 'rgba(161, 162, 166, 0.2)';
+                    ctx.fillStyle = 'rgba(161, 162, 166, 0.3)';
                     ctx.fill();
                 }
                 update() {
@@ -609,6 +128,7 @@
                     this.draw();
                 }
             }
+
             function init() {
                 particlesArray = [];
                 let numberOfParticles = (canvas.height * canvas.width) / 9000;
@@ -622,6 +142,7 @@
                     particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
                 }
             }
+
             function connect() {
                 let opacityValue = 1;
                 for (let a = 0; a < particlesArray.length; a++) {
@@ -639,6 +160,7 @@
                     }
                 }
             }
+
             function animate() {
                 requestAnimationFrame(animate);
                 ctx.clearRect(0, 0, innerWidth, innerHeight);
@@ -647,27 +169,22 @@
                 }
                 connect();
             }
+
             window.addEventListener('resize', function() {
                 canvas.width = innerWidth;
                 canvas.height = innerHeight;
                 mouse.radius = ((canvas.height / 120) * (canvas.height / 120));
                 init();
             });
+
             window.addEventListener('mouseout', function(){
                 mouse.x = undefined;
                 mouse.y = undefined;
             });
+
             init();
             animate();
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
